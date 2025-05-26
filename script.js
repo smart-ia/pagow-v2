@@ -5,6 +5,7 @@ function payBill() {
     //const cuenta = document.getElementById('cuenta').value;
     // const clave = document.getElementById('clave').value;
      const factura = document.getElementById('factura').value;
+     const direccion = document.getElementById('direccion').value;
 
     if (name && cedula && invoice && factura) {
         // URL del webhook
@@ -13,7 +14,8 @@ function payBill() {
         // Datos a enviar al webhook
         const data = {
             factura: factura,
-            cedula: cedula
+            cedula: cedula,
+            direccion: direccion
         };
 
         // Enviar los datos al webhook usando fetch
@@ -32,8 +34,6 @@ function payBill() {
             }
         })
         .then(responseText => {
-            // Aquí puedes realizar más operaciones con la respuesta si es necesario
-            console.log('Respuesta del servidor:', responseText);
 
             // Mostrar mensaje de éxito
             Swal.fire({

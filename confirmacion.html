@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,13 +10,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
     <div class="container">
         <div class="confirmation">
             <h1>Pago Confirmado</h1>
             <div class="message">
                 <p>Gracias, <span id="user-name"></span>.</p>
-                <p>Tu pago para la factura <span id="invoice-number"></span> ha sido procesado con éxito. Te hemos enviado la copia del recibo de pago a tu correo electrónico.</p>
+                <p>Tu pago para la factura <span id="invoice-number"></span> ha sido procesado con éxito. Te hemos
+                    enviado la copia del recibo de pago a tu correo electrónico.</p>
+                <p>Dirección de entrega: <span id="user-direccion"></span></p>
                 <img src="https://github.com/smart-ia/pagow/raw/main/confirma.png" alt="Confirmación">
             </div>
         </div>
@@ -42,10 +46,14 @@
             if (params.invoice) {
                 document.getElementById('invoice-number').textContent = params.invoice;
             }
+            if (params.direccion) {
+                document.getElementById('user-direccion').textContent = params.direccion;
+            }
         }
 
         // Llenar la página cuando el DOM esté listo
         document.addEventListener('DOMContentLoaded', fillConfirmationPage);
     </script>
 </body>
+
 </html>
