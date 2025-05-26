@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Pago</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Incluir SweetAlert CSS y JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="confirmation">
+            <h1>Pago Confirmado</h1>
+            <div class="message">
+                <p>Gracias, <span id="user-name"></span>.</p>
+                <p>Tu pago para la factura <span id="invoice-number"></span> ha sido procesado con éxito. Te hemos enviado la copia del recibo de pago a tu correo electrónico.</p>
+                <img src="https://github.com/smart-ia/pagow/raw/main/confirma.png" alt="Confirmación">
+            </div>
+        </div>
+    </div>
+    <script>
+        // Obtener los parámetros de la URL
+        function getQueryParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const pairs = queryString.split("&");
+            for (const pair of pairs) {
+                const [key, value] = pair.split("=");
+                params[decodeURIComponent(key)] = decodeURIComponent(value.replace(/\+/g, " "));
+            }
+            return params;
+        }
+
+        // Llenar la página de confirmación con los datos del usuario
+        function fillConfirmationPage() {
+            const params = getQueryParams();
+            if (params.name) {
+                document.getElementById('user-name').textContent = params.name;
+            }
+            if (params.invoice) {
+                document.getElementById('invoice-number').textContent = params.invoice;
+            }
+        }
+
+        // Llenar la página cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', fillConfirmationPage);
+    </script>
+</body>
+</html>

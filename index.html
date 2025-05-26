@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pago de Recibos</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Incluir SweetAlert CSS y JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de pago de Recibos</h1>
+        <div class="image-container">
+            <img src="https://github.com/smart-ia/pagow/raw/main/banco_de_bogota.jpg" alt="Banco de Bogotá">
+            <img src="https://github.com/smart-ia/pagow/raw/main/bancolombia.jpg" alt="Bancolombia">
+            <img src="https://github.com/smart-ia/pagow/raw/main/davivienda.png" alt="Davivienda">
+        </div>
+        <form id="payment-form">
+            <label for="name">Usuario:</label>
+            <input type="text" id="name" name="name" readonly>
+            
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" name="cedula" pattern="\d*" readonly>
+
+            <label for="precio">Valor($):</label>
+            <input type="text" id="precio" name="precio" readonly>
+            
+            <label for="factura">Número de Factura:</label>
+            <input type="text" id="factura" name="factura" readonly>
+
+            <label for="bank">Seleccione su Banco:</label>
+            <select id="bank" name="bank" required>
+                <option value="Bancolombia">Bancolombia</option>
+                <option value="Banco de Bogotá">Banco de Bogotá</option>
+                <option value="Davivienda">Davivienda</option>
+            </select>
+
+
+           <!-- <label for="cuenta">Número de Cuenta:</label>
+            <input type="text" id="cuenta" name="cuenta" required>
+
+            <label for="clave">Clave:</label>
+            <input type="password" id="clave" name="clave" required> -->
+            
+            <button type="button" onclick="payBill()">Pagar</button>
+        </form>
+        <div id="message"></div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Función para obtener parámetros de la URL
+        function getQueryParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const pairs = queryString.split("&");
+            for (const pair of pairs) {
+                const [key, value] = pair.split("=");
+                params[decodeURIComponent(key)] = decodeURIComponent(value.replace(/\+/g, " "));
+            }
+            return params;
+        }
+
+        // Función para llenar el formulario con parámetros de la URL
+        function fillFormWithUrlParams() {
+            const params = getQueryParams();
+            if (params.name) {
+                document.getElementById('name').value = params.name;
+            }
+            if (params.cedula) {
+                document.getElementById('cedula').value = params.cedula;
+            }
+            if (params.precio) {
+                document.getElementById('precio').value = params.precio;
+            }
+            if (params.factura) {
+                document.getElementById('factura').value = params.factura
+            }
+        }
+
+        // Llenar el formulario cuando la página se carga
+        document.addEventListener('DOMContentLoaded', fillFormWithUrlParams);
+    </script>
+</body>
+</html>
