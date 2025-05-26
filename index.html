@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
     <div class="container">
         <h1>Sistema de pago de Recibos</h1>
@@ -20,13 +22,13 @@
         <form id="payment-form">
             <label for="name">Usuario:</label>
             <input type="text" id="name" name="name" readonly>
-            
+
             <label for="cedula">Cédula:</label>
             <input type="text" id="cedula" name="cedula" pattern="\d*" readonly>
 
             <label for="precio">Valor($):</label>
             <input type="text" id="precio" name="precio" readonly>
-            
+
             <label for="factura">Número de Factura:</label>
             <input type="text" id="factura" name="factura" readonly>
 
@@ -38,12 +40,12 @@
             </select>
 
 
-           <!-- <label for="cuenta">Número de Cuenta:</label>
+            <!-- <label for="cuenta">Número de Cuenta:</label>
             <input type="text" id="cuenta" name="cuenta" required>
 
             <label for="clave">Clave:</label>
             <input type="password" id="clave" name="clave" required> -->
-            
+
             <button type="button" onclick="payBill()">Pagar</button>
         </form>
         <div id="message"></div>
@@ -51,14 +53,66 @@
     <script src="script.js"></script>
     <script>
         // Función para obtener parámetros de la URL
+
+        function decodeBase64ToString(base64String) {
+            try {
+                // Reemplazar caracteres especiales de URL a base64 estándar
+                const safeBase64 = base64String.replace(/-/g, '+').replace(/_/g, '/');
+
+                // Decodificar base64
+                const decodedString = atob(safeBase64);
+
+                // Convertir a array de bytes para manejar caracteres especiales
+                const bytes = new Uint8Array(decodedString.length);
+                for (let i = 0; i < decodedString.length; i++) {
+                    bytes[i] = decodedString.charCodeAt(i);
+                }
+
+                // Convertir los bytes a string usando el decodificador de texto
+                const decoder = new TextDecoder('utf-8');
+                return decoder.decode(bytes);
+            } catch (error) {
+                console.error('Error en la decodificación base64:', error);
+                return '';
+            }
+        }
+
         function getQueryParams() {
             const params = {};
+
+            // Obtener el string de consulta (query string) de la URL
             const queryString = window.location.search.substring(1);
-            const pairs = queryString.split("&");
-            for (const pair of pairs) {
-                const [key, value] = pair.split("=");
-                params[decodeURIComponent(key)] = decodeURIComponent(value.replace(/\+/g, " "));
+
+            // Si hay un parámetro 'data' codificado en base64
+            if (queryString.startsWith('data=')) {
+                try {
+                    // Obtener el valor codificado en base64
+                    const base64Data = queryString.substring(5); // Eliminar 'data='
+
+                    // Decodificar el valor de base64 a string
+                    const decodedData = decodeBase64ToString(base64Data);
+
+                    // Parsear el JSON decodificado
+                    const jsonData = JSON.parse(decodedData);
+
+                    // Asignar cada propiedad del JSON a los parámetros
+                    for (const key in jsonData) {
+                        if (jsonData.hasOwnProperty(key)) {
+                            params[key] = jsonData[key];
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error al decodificar los datos:', error);
+                }
+            } else {
+                // Mantener el procesamiento original para compatibilidad
+                const pairs = queryString.split("&");
+                for (const pair of pairs) {
+                    const [key, value] = pair.split("=");
+                    params[decodeURIComponent(key)] = decodeURIComponent(value.replace(/\+/g, " "));
+                }
             }
+
             return params;
         }
 
@@ -83,4 +137,5 @@
         document.addEventListener('DOMContentLoaded', fillFormWithUrlParams);
     </script>
 </body>
+
 </html>
